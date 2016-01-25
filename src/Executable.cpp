@@ -62,7 +62,7 @@ parse_command_line(int argc, char** argv)
             "Limit transmission bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
         ("frequency-sending-bandwidth,f",
             po::value<uint64_t>(&c.frequency_sending_bandwidth)
-                ->default_value(100),
+                ->default_value(10),
             "Sending bandwidth calculation frequency Hz\n")
         ("verify,v",
             po::value<Configuration::Verify>(&c.verify)
