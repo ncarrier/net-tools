@@ -60,10 +60,6 @@ public:
     void
     close();
 
-    socket_type::native_handle_type
-    native_handle()
-    { return socket_.native_handle(); }
-
 private:
     struct on_accept
     {

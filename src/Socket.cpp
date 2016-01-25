@@ -64,7 +64,15 @@ Socket::Socket(const Configuration & configuration)
         socket_.set_option(s);
     }
 
-    socket_.non_blocking(configuration.non_blocking_io);
+    if (configuration.non_blocking_io)
+    {
+#if BOOST_VERSION >= 104700
+        socket_.non_blocking(true);
+#else
+        ao::socket_base::non_blocking_io i(true);
+        socket_.io_control(i);
+#endif
+    }
 }
 
 ao::ip::tcp::endpoint
