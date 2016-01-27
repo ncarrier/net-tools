@@ -40,19 +40,22 @@ public:
 
 public:
     explicit
-    Socket(const Configuration & configuration);
+    Socket(boost::asio::io_service & io_service,
+           const Configuration & configuration);
 
-    template<typename MutableBufferSequence>
-    std::size_t
-    read_some(const MutableBufferSequence & buffers,
-              boost::system::error_code & failure)
-    { return socket_.read_some(buffers, failure); }
+    template<typename MutableBufferSequence, typename ReadHandler>
+    void
+    async_receive(const MutableBufferSequence & buffers, ReadHandler handler)
+    {
+        socket_.async_receive(buffers, handler);
+    }
 
-    template<typename ConstBufferSequence>
-    std::size_t
-    write_some(const ConstBufferSequence & buffers,
-               boost::system::error_code & failure)
-    { return socket_.write_some(buffers, failure); }
+    template<typename ConstBufferSequence, typename WriteHandler>
+    void
+    async_send(const ConstBufferSequence & buffers, WriteHandler handler)
+    {
+        socket_.async_send(buffers, handler);
+    }
 
     void
     shutdown_send();
@@ -89,7 +92,7 @@ private:
            const boost::posix_time::time_duration & timeout);
 
 private:
-    boost::asio::io_service io_service_;
+    boost::asio::io_service & io_service_;
     socket_type socket_;
 };
 

@@ -39,13 +39,13 @@ struct Configuration
 {
     enum Mode { CLIENT, SERVER } mode;
     std::string endpoint;
-    Size sending_bandwidth;
-    uint64_t frequency_sending_bandwidth;
+    Size send_bandwidth;
+    Size receive_bandwidth;
+    uint64_t bandwidth_sampling_frequency;
     enum Verify { NONE, FIRST, ALL } verify;
     Size windows;
     Size size;
-    boost::posix_time::time_duration duration;
-    bool non_blocking_io;
+    boost::posix_time::time_duration duration_margin;
 };
 
 std::istream &

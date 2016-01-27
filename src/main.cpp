@@ -26,6 +26,8 @@
 #include <stdexcept>
 #include <cstdlib>
 
+#include <boost/system/system_error.hpp>
+
 #include "Executable.hpp"
 
 int
@@ -36,15 +38,20 @@ main(int argc, char **argv)
         enyx::tcp_tester::Executable::run(argc, argv);
         return EXIT_SUCCESS;
     }
+    catch (const boost::system::system_error & e)
+    {
+        std::cerr << e.what() << "." << std::endl;
+        return -e.code().value();
+    }
     catch (const std::exception & e)
     {
         std::cerr << "Failed because " << e.what() << "." << std::endl;
+        return EXIT_FAILURE;
     }
     catch (...)
     {
         std::cerr << "Failed because an unknow error occured." << std::endl;
+        return EXIT_FAILURE;
     }
-
-    return EXIT_FAILURE;
 }
 

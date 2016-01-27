@@ -24,17 +24,86 @@
 
 #pragma once
 
+#include <stdint.h>
+#include <vector>
+
+#include <boost/system/error_code.hpp>
+
 #include "Configuration.hpp"
+#include "BandwidthThrottle.hpp"
+#include "Socket.hpp"
+#include "Statistics.hpp"
 
 namespace enyx {
 namespace tcp_tester {
 
-namespace Application {
+class Application
+{
+public:
+    Application(const Configuration & configuration);
 
     void
-    run(const Configuration & c);
+    run();
 
-} // namespace Application
+private:
+    typedef std::vector<uint8_t> buffer_type;
+
+    enum { BUFFER_SIZE = 16 * 1024 };
+
+private:
+    boost::posix_time::time_duration
+    estimate_test_duration();
+
+    void
+    on_timeout(const boost::system::error_code & failure);
+
+    void
+    async_receive(std::size_t slice_remaining_size = 0ULL);
+
+    void
+    on_receive(std::size_t bytes_transferred,
+               const boost::system::error_code & failure,
+               std::size_t slice_remaining_size);
+
+    void
+    verify(std::size_t bytes_transferred);
+
+    void
+    verify(std::size_t offset, uint8_t expected_byte);
+
+    void
+    async_receive_eof();
+
+    void
+    on_eof(std::size_t bytes_transferred,
+           const boost::system::error_code & failure);
+
+    void
+    async_send(std::size_t slice_remaining_size = 0ULL);
+
+    void
+    on_send(std::size_t bytes_transferred,
+            const boost::system::error_code & failure,
+            std::size_t slice_remaining_size);
+
+    void
+    abort(const boost::system::error_code & failure);
+
+    void
+    finish();
+
+private:
+    Configuration configuration_;
+    boost::asio::io_service io_service_;
+    boost::asio::io_service::work work_;
+    Socket socket_;
+    Statistics statistics_;
+    boost::system::error_code failure_;
+    buffer_type send_buffer_;
+    BandwidthThrottle send_throttle_;
+    buffer_type receive_buffer_;
+    BandwidthThrottle receive_throttle_;
+};
 
 } // namespace tcp_tester
 } // namespace enyx

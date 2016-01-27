@@ -36,11 +36,9 @@ namespace tcp_tester {
 
 struct Statistics
 {
-    uint64_t checksum_error;
     Size received_bytes_count;
-    boost::posix_time::time_duration reception_duration;
     Size sent_bytes_count;
-    boost::posix_time::time_duration transmission_duration;
+    boost::posix_time::time_duration duration;
 };
 
 std::ostream &

@@ -1,5 +1,7 @@
 add_executable(nx-iperf
     main.cpp
+    Error.hpp
+    Error.cpp
     Size.hpp
     Size.cpp
     Socket.hpp
@@ -12,12 +14,10 @@ add_executable(nx-iperf
     SignalHandler.cpp
     Configuration.hpp
     Configuration.cpp
+    BandwidthThrottle.hpp
+    BandwidthThrottle.cpp
     Application.hpp
-    Application.cpp
-    Sender.hpp
-    Sender.cpp
-    Receiver.hpp
-    Receiver.cpp)
+    Application.cpp)
 
 target_link_libraries(nx-iperf
     ${Boost_LIBRARIES}

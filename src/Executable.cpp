@@ -53,17 +53,23 @@ parse_command_line(int argc, char** argv)
             "Connect to following address\n")
         ("listen,l",
             po::value<std::string>(&c.endpoint),
-            "Listen on following address\n");
+            "Listen on following address\n")
+        ("size,s",
+            po::value<Size>(&c.size),
+            "Amount of data to send (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n");
 
     po::options_description optional("Optional arguments");
     optional.add_options()
-        ("bandwidth,b",
-            po::value<Size>(&c.sending_bandwidth),
-            "Limit transmission bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
-        ("frequency-sending-bandwidth,f",
-            po::value<uint64_t>(&c.frequency_sending_bandwidth)
+        ("tx-bandwidth,t",
+            po::value<Size>(&c.send_bandwidth),
+            "Limit send bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
+        ("rx-bandwidth,r",
+            po::value<Size>(&c.receive_bandwidth),
+            "Limit send bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
+        ("bandwidth-sampling-frequency,f",
+            po::value<uint64_t>(&c.bandwidth_sampling_frequency)
                 ->default_value(10),
-            "Sending bandwidth calculation frequency Hz\n")
+            "Bandwidth calculation frequency Hz\n")
         ("verify,v",
             po::value<Configuration::Verify>(&c.verify)
                 ->default_value(Configuration::NONE),
@@ -72,17 +78,11 @@ parse_command_line(int argc, char** argv)
         ("windows,w",
             po::value<Size>(&c.windows),
             "Tcp socket buffer size (e.g. 8Kb, 16Mb)\n")
-        ("size,s",
-            po::value<Size>(&c.size),
-            "Amount of data to send (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
-        ("non-blocking-io,n",
-            po::value<bool>(&c.non_blocking_io)
-                ->implicit_value(true),
-            "Use non-blocking io\n")
-        ("duration,d",
-            po::value<pt::time_duration>(&c.duration)
+        ("duration-margin,d",
+            po::value<pt::time_duration>(&c.duration_margin)
                 ->default_value(pt::not_a_date_time, "infinity"),
-            "Test duration\n")
+            "Extra time from theorical test time allowed to"
+            " complete without timeout error\n")
         ("help,h",
             "Print the command lines arguments\n");
 
@@ -102,8 +102,11 @@ parse_command_line(int argc, char** argv)
     if (args.count("connect") && args.count("listen"))
         throw std::runtime_error("--connect and --listen are mutually exclusive");
 
-    if (args["frequency-sending-bandwidth"].as<uint64_t>() == 0)
-        throw std::runtime_error("invalid --frequency-sending-bandwidth");
+    if (args["bandwidth-sampling-frequency"].as<uint64_t>() == 0)
+        throw std::runtime_error("invalid --bandwidth-sampling-frequency");
+
+    if (! args.count("size") || args["size"].as<Size>() == 0)
+        throw std::runtime_error("--size is required");
 
     if (args.count("connect"))
         c.mode = Configuration::CLIENT;
@@ -122,7 +125,7 @@ namespace Executable {
 void
 run(int argc, char** argv)
 {
-    Application::run(parse_command_line(argc, argv));
+    Application(parse_command_line(argc, argv)).run();
 }
 
 }

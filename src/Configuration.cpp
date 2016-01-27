@@ -136,12 +136,18 @@ operator<<(std::ostream & out, const Configuration & configuration)
     {
         out << "mode: " << configuration.mode << "\n";
         out << "endpoint: " << configuration.endpoint << "\n";
-        if (configuration.sending_bandwidth != 0)
-            out << "bandwidth: " << configuration.sending_bandwidth << "/s\n";
+        if (configuration.send_bandwidth != 0)
+            out << "send_bandwidth: "
+                << configuration.send_bandwidth << "/s\n";
         else
-            out << "bandwidth: unlimited\n";
-        out << "frequency_sending_bandwidth: "
-            << configuration.frequency_sending_bandwidth << "\n";
+            out << "send_bandwidth: unlimited\n";
+        if (configuration.receive_bandwidth != 0)
+            out << "receive_bandwidth: "
+                << configuration.receive_bandwidth << "/s\n";
+        else
+            out << "receive_bandwidth: unlimited\n";
+        out << "bandwidth_sampling_frequency: "
+            << configuration.bandwidth_sampling_frequency << "Hz\n";
         out << "verify: " << configuration.verify << "\n";
         if (configuration.windows != 0)
             out << "windows: " << configuration.windows << "\n";
@@ -151,9 +157,11 @@ operator<<(std::ostream & out, const Configuration & configuration)
             out << "size: " << configuration.size << "\n";
         else
             out << "size: unlimited\n";
-        out << "duration: " << configuration.duration << "\n";
-        out << "non_blocking_io: " << std::boolalpha << configuration.non_blocking_io;
-        out << std::endl;
+        if (configuration.duration_margin.is_special())
+            out << "duration_margin: default";
+        else
+            out << "duration_margin: " << configuration.duration_margin;
+        out << std::flush;
     }
 
     return out;

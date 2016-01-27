@@ -43,6 +43,9 @@ compute_bandwith(Size bytes_count,
 {
     std::ostringstream out;
 
+    if (duration.is_special() || duration.total_milliseconds() == 0)
+        return "undefined";
+
     bytes_count /= duration.total_milliseconds();
     bytes_count *= 1000;
 
@@ -56,18 +59,16 @@ compute_bandwith(Size bytes_count,
 std::ostream &
 operator<<(std::ostream & out, const Statistics & statistics)
 {
-    return out << "checksum_error: "
-               << statistics.checksum_error << "\n"
-               << "received_bytes_count: "
+    return out << "received_bytes_count: "
                << statistics.received_bytes_count << "\n"
-               << "reception_bandwith: "
+               << "receive_bandwith: "
                << compute_bandwith(statistics.received_bytes_count,
-                                   statistics.reception_duration) << "\n"
+                                   statistics.duration) << "\n"
                << "sent_bytes_count: "
                << statistics.sent_bytes_count << "\n"
-               << "transmission_bandwidth: "
+               << "send_bandwidth: "
                << compute_bandwith(statistics.sent_bytes_count,
-                                   statistics.transmission_duration)
+                                   statistics.duration)
                << std::endl;
 }
 

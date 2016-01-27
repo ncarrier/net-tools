@@ -38,8 +38,9 @@ namespace tcp_tester {
 namespace ao = boost::asio;
 namespace pt = boost::posix_time;
 
-Socket::Socket(const Configuration & configuration)
-    : io_service_(), socket_(io_service_)
+Socket::Socket(boost::asio::io_service & io_service,
+               const Configuration & configuration)
+    : io_service_(io_service), socket_(io_service_)
 {
     const ao::ip::tcp::endpoint e(resolve(configuration.endpoint));
 
@@ -50,7 +51,7 @@ Socket::Socket(const Configuration & configuration)
             connect(e);
             break;
         case Configuration::SERVER:
-            listen(e, pt::seconds(10));
+            listen(e, pt::pos_infin);
             break;
     }
 
@@ -62,16 +63,6 @@ Socket::Socket(const Configuration & configuration)
 
         ao::socket_base::send_buffer_size s(configuration.windows);
         socket_.set_option(s);
-    }
-
-    if (configuration.non_blocking_io)
-    {
-#if BOOST_VERSION >= 104700
-        socket_.non_blocking(true);
-#else
-        ao::socket_base::non_blocking_io i(true);
-        socket_.io_control(i);
-#endif
     }
 }
 
