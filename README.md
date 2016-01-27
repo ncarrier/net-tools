@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/Enyx-SA/net-tools.svg?branch=master)](https://travis-ci.org/Enyx-SA/net-tools)
+[![Build status](https://ci.appveyor.com/api/projects/status/h84jq9hmg3iglqpo?svg=true)](https://ci.appveyor.com/project/DavidKeller/net-tools)
+
 
 Description
 ===========
