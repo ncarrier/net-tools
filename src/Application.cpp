@@ -97,7 +97,7 @@ Application::estimate_test_duration()
               << " (+" << configuration_.duration_margin
               << ")." << std::endl;
 
-    return duration = configuration_.duration_margin;
+    return duration + configuration_.duration_margin;
 }
 
 void
