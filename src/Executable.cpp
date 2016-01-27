@@ -41,6 +41,8 @@ namespace pt = boost::posix_time;
 
 namespace {
 
+const Size DEFAULT_BANDWIDTH = Size(128 * 1024 * 1024);
+
 Configuration
 parse_command_line(int argc, char** argv)
 {
@@ -61,11 +63,13 @@ parse_command_line(int argc, char** argv)
     po::options_description optional("Optional arguments");
     optional.add_options()
         ("tx-bandwidth,t",
-            po::value<Size>(&c.send_bandwidth),
+            po::value<Size>(&c.send_bandwidth)
+                ->default_value(DEFAULT_BANDWIDTH),
             "Limit send bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
         ("rx-bandwidth,r",
-            po::value<Size>(&c.receive_bandwidth),
-            "Limit send bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
+            po::value<Size>(&c.receive_bandwidth)
+                ->default_value(DEFAULT_BANDWIDTH),
+            "Limit receive bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
         ("bandwidth-sampling-frequency,f",
             po::value<uint64_t>(&c.bandwidth_sampling_frequency)
                 ->default_value(10),
@@ -73,8 +77,8 @@ parse_command_line(int argc, char** argv)
         ("verify,v",
             po::value<Configuration::Verify>(&c.verify)
                 ->default_value(Configuration::NONE),
-            "Verify received bytes."
-            "\nAccepted values:\n  none\n  first\n  all\n")
+            "Verify received bytes. "
+            "Accepted values:\n  - none\n  - first\n  - all\n")
         ("windows,w",
             po::value<Size>(&c.windows),
             "Tcp socket buffer size (e.g. 8Kb, 16Mb)\n")

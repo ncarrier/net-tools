@@ -136,16 +136,10 @@ operator<<(std::ostream & out, const Configuration & configuration)
     {
         out << "mode: " << configuration.mode << "\n";
         out << "endpoint: " << configuration.endpoint << "\n";
-        if (configuration.send_bandwidth != 0)
-            out << "send_bandwidth: "
-                << configuration.send_bandwidth << "/s\n";
-        else
-            out << "send_bandwidth: unlimited\n";
-        if (configuration.receive_bandwidth != 0)
-            out << "receive_bandwidth: "
-                << configuration.receive_bandwidth << "/s\n";
-        else
-            out << "receive_bandwidth: unlimited\n";
+        out << "send_bandwidth: "
+            << configuration.send_bandwidth << "/s\n";
+        out << "receive_bandwidth: "
+            << configuration.receive_bandwidth << "/s\n";
         out << "bandwidth_sampling_frequency: "
             << configuration.bandwidth_sampling_frequency << "Hz\n";
         out << "verify: " << configuration.verify << "\n";
@@ -153,10 +147,7 @@ operator<<(std::ostream & out, const Configuration & configuration)
             out << "windows: " << configuration.windows << "\n";
         else
             out << "windows: default system value\n";
-        if (configuration.size != 0)
-            out << "size: " << configuration.size << "\n";
-        else
-            out << "size: unlimited\n";
+        out << "size: " << configuration.size << "\n";
         if (configuration.duration_margin.is_special())
             out << "duration_margin: default";
         else

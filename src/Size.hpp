@@ -33,14 +33,18 @@ namespace tcp_tester {
 class Size
 {
 public:
+    Size(uint64_t value = 0ULL)
+        : value_(value)
+    { }
+
     operator const uint64_t &() const
-    { return value; }
+    { return value_; }
 
     operator uint64_t &()
-    { return value; }
+    { return value_; }
 
 private:
-    uint64_t value;
+    uint64_t value_;
 };
 
 std::istream &
