@@ -33,7 +33,6 @@
 
 #include "Error.hpp"
 #include "Socket.hpp"
-#include "SignalHandler.hpp"
 #include "Statistics.hpp"
 
 namespace enyx {

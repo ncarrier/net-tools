@@ -10,8 +10,6 @@ add_executable(nx-iperf
     Statistics.cpp
     Executable.hpp
     Executable.cpp
-    SignalHandler.hpp
-    SignalHandler.cpp
     Configuration.hpp
     Configuration.cpp
     BandwidthThrottle.hpp
