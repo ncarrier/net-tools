@@ -149,9 +149,10 @@ operator<<(std::ostream & out, const Configuration & configuration)
             out << "windows: default system value\n";
         out << "size: " << configuration.size << "\n";
         if (configuration.duration_margin.is_special())
-            out << "duration_margin: default";
+            out << "duration_margin: default\n";
         else
-            out << "duration_margin: " << configuration.duration_margin;
+            out << "duration_margin: "
+                << configuration.duration_margin << "\n";
         out << "initiate_close: " << std::boolalpha
             << configuration.initiate_close << std::endl;
         out << std::flush;
