@@ -13,12 +13,14 @@ Requirements
 
 Steps
 ------------
-On linux/BSD
+On linux/BSD:
+
     $mkdir build && cd build
     $cmake ..
     $make -j`nproc`
 
 On Windows:
+
     >mkdir build && cd build
     >cmake -G "Visual Studio 14 2015 Win64"
     >cmake --build . --config Release
