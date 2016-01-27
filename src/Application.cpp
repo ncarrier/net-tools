@@ -88,7 +88,7 @@ Application::estimate_test_duration()
     uint64_t bandwidth = std::min(configuration_.receive_bandwidth,
                                   configuration_.send_bandwidth);
 
-    pt::time_duration duration = pt::seconds(configuration_.size / bandwidth);
+    pt::time_duration duration = pt::seconds(configuration_.size / bandwidth + 1);
 
     if (configuration_.duration_margin.is_special())
         configuration_.duration_margin = duration / 10;
@@ -97,7 +97,7 @@ Application::estimate_test_duration()
               << " (+" << configuration_.duration_margin
               << ")." << std::endl;
 
-    return duration + configuration_.duration_margin + pt::seconds(1);
+    return duration + configuration_.duration_margin;
 }
 
 void

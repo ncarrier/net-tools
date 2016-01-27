@@ -1,0 +1,19 @@
+sudo: false
+
+os:
+    - linux
+
+language:
+    - cpp
+
+script:
+    - mkdir build && cd build
+    - cmake ..
+    - make -j`nproc`
+
+addons:
+    apt:
+        packages:
+            - cmake
+            - libboost-all-dev
+
