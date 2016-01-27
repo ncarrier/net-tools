@@ -248,7 +248,12 @@ Application::on_send(std::size_t bytes_transferred,
         if (statistics_.sent_bytes_count < configuration_.size)
             async_send(size);
         else
+        {
             std::cout << "Finished sending" << std::endl;
+
+            if (configuration_.initiate_close)
+                socket_.shutdown_send();
+        }
     }
 }
 

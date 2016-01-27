@@ -82,6 +82,9 @@ parse_command_line(int argc, char** argv)
         ("windows,w",
             po::value<Size>(&c.windows),
             "Tcp socket buffer size (e.g. 8Kb, 16Mb)\n")
+        ("initiate-close,i",
+            po::bool_switch(&c.initiate_close),
+            "Send FIN right after sending is completed\n")
         ("duration-margin,d",
             po::value<pt::time_duration>(&c.duration_margin)
                 ->default_value(pt::not_a_date_time, "infinity"),

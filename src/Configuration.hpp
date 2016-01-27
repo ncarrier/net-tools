@@ -46,6 +46,7 @@ struct Configuration
     Size windows;
     Size size;
     boost::posix_time::time_duration duration_margin;
+    bool initiate_close;
 };
 
 std::istream &

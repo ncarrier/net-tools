@@ -152,6 +152,8 @@ operator<<(std::ostream & out, const Configuration & configuration)
             out << "duration_margin: default";
         else
             out << "duration_margin: " << configuration.duration_margin;
+        out << "initiate_close: " << std::boolalpha
+            << configuration.initiate_close << std::endl;
         out << std::flush;
     }
 
