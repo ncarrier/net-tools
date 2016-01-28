@@ -29,6 +29,7 @@
 #include <sstream>
 #include <iomanip>
 
+#include <boost/io/ios_state.hpp>
 #include <boost/regex.hpp>
 
 namespace enyx {
@@ -75,20 +76,6 @@ parse_size(const std::string & s)
     return size;
 }
 
-struct precision_setter
-{
-    precision_setter
-        (std::ostream & out, int precision)
-            : out_(out), precision_(out_.precision())
-    { out_.precision(precision); }
-
-    ~precision_setter()
-    { out_.precision(precision_); }
-
-    std::ostream & out_;
-    int precision_;
-};
-
 } // anonymous namespace
 
 std::istream &
@@ -121,8 +108,8 @@ operator<<(std::ostream & out, const Size & size)
         for (i = 0; i != UNITS_COUNT - 1 && value / 1024. >= 1.; ++i)
             value /= 1024.;
 
-        precision_setter p(out, 3);
-        out << value << units[i];
+        boost::io::ios_flags_saver s(out);
+        out << std::fixed << std::setprecision(1) << value << units[i];
     }
 
     return out;
