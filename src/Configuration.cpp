@@ -120,14 +120,56 @@ operator<<(std::ostream & out, const Configuration & configuration)
         else
             out << "duration_margin: "
                 << configuration.duration_margin << "\n";
-        out << "initiate_close: " << std::boolalpha
-            << configuration.initiate_close << std::endl;
+        out << "shutdown_policy: "
+            << configuration.shutdown_policy << "\n";
         out << std::flush;
     }
 
     return out;
 }
 
+std::istream &
+operator>>(std::istream & in, Configuration::ShutdownPolicy & policy)
+{
+    std::istream::sentry sentry(in);
+
+    if (sentry)
+    {
+        std::string s;
+        in >> s;
+
+        if (s == "wait_for_peer")
+            policy = Configuration::WAIT_FOR_PEER;
+        else if (s == "send_complete")
+            policy = Configuration::SEND_COMPLETE;
+        else if (s == "receive_complete")
+            policy = Configuration::RECEIVE_COMPLETE;
+        else
+            throw std::runtime_error("Unexpected shutdown policy");
+    }
+
+    return in;
+}
+
+std::ostream &
+operator<<(std::ostream & out, const Configuration::ShutdownPolicy & policy)
+{
+    std::ostream::sentry sentry(out);
+
+    if (! sentry)
+        return out;
+
+    switch (policy)
+    {
+    default:
+    case Configuration::WAIT_FOR_PEER:
+        return out << "wait_for_peer";
+    case Configuration::SEND_COMPLETE:
+        return out << "send_complete";
+    case Configuration::RECEIVE_COMPLETE:
+        return out << "receive_complete";
+    }
+}
 
 } // namespace tcp_tester
 } // namespace enyx

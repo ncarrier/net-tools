@@ -37,16 +37,20 @@ namespace tcp_tester {
 
 struct Configuration
 {
-    enum Mode { CLIENT, SERVER } mode;
+    enum Mode { CLIENT, SERVER };
+    enum Verify { NONE, FIRST, ALL };
+    enum ShutdownPolicy { WAIT_FOR_PEER, SEND_COMPLETE, RECEIVE_COMPLETE };
+
+    Mode mode;
+    Verify verify;
     std::string endpoint;
     Size send_bandwidth;
     Size receive_bandwidth;
     uint64_t bandwidth_sampling_frequency;
-    enum Verify { NONE, FIRST, ALL } verify;
     Size windows;
     Size size;
     boost::posix_time::time_duration duration_margin;
-    bool initiate_close;
+    ShutdownPolicy shutdown_policy;
 };
 
 std::istream &
@@ -60,6 +64,12 @@ operator<<(std::ostream & out, const Configuration::Mode & mode);
 
 std::ostream &
 operator<<(std::ostream & out, const Configuration & configuration);
+
+std::istream &
+operator>>(std::istream & in, Configuration::ShutdownPolicy & policy);
+
+std::ostream &
+operator<<(std::ostream & out, const Configuration::ShutdownPolicy & policy);
 
 } // namespace tcp_tester
 } // namespace enyx

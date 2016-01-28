@@ -151,7 +151,8 @@ Application::on_receive(std::size_t bytes_transferred,
             async_receive(size);
         else
         {
-            socket_.shutdown_send();
+            if (configuration_.shutdown_policy == Configuration::RECEIVE_COMPLETE)
+                socket_.shutdown_send();
             async_receive_eof();
         }
     }
@@ -251,7 +252,7 @@ Application::on_send(std::size_t bytes_transferred,
         {
             std::cout << "Finished sending" << std::endl;
 
-            if (configuration_.initiate_close)
+            if (configuration_.shutdown_policy == Configuration::SEND_COMPLETE)
                 socket_.shutdown_send();
         }
     }

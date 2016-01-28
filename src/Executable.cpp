@@ -77,14 +77,16 @@ parse_command_line(int argc, char** argv)
         ("verify,v",
             po::value<Configuration::Verify>(&c.verify)
                 ->default_value(Configuration::NONE),
-            "Verify received bytes. "
-            "Accepted values:\n  - none\n  - first\n  - all\n")
+            "Verify received bytes. Accepted values:\n"
+            "  - none\n  - first\n  - all\n")
         ("windows,w",
             po::value<Size>(&c.windows),
             "Tcp socket buffer size (e.g. 8Kb, 16Mb)\n")
-        ("initiate-close,i",
-            po::bool_switch(&c.initiate_close),
-            "Send FIN right after sending is completed\n")
+        ("shutdown-policy,S",
+            po::value<Configuration::ShutdownPolicy>(&c.shutdown_policy)
+                ->default_value(Configuration::RECEIVE_COMPLETE),
+            "Connection shutdown policy. Accepted values:\n"
+            "  - wait_for_peer\n  - send_complete\n  - receive_complete\n")
         ("duration-margin,d",
             po::value<pt::time_duration>(&c.duration_margin)
                 ->default_value(pt::not_a_date_time, "infinity"),
