@@ -33,43 +33,6 @@
 namespace enyx {
 namespace tcp_tester {
 
-namespace {
-
-uint64_t
-parse_size(const std::string & s)
-{
-    boost::regex r("(\\d+)\\s*([KMG]?)([bB])");
-    boost::smatch m;
-
-    if (! boost::regex_match(s, m, r))
-    {
-        std::ostringstream error;
-        error << "size '" << s
-              << "' doesn't match \\d+\\s*[KMG]?[bB]";
-        throw std::runtime_error(error.str());
-    }
-
-    uint64_t size = std::atoll(m.str(1).c_str());
-
-    if (m[2].matched)
-        switch (m.str(2)[0])
-        {
-        case 'G':
-            size *= 1024;
-        case 'M':
-            size *= 1024;
-        case 'K':
-            size *= 1024;
-        }
-
-    if (m.str(3) == "b")
-        size /= 8;
-
-    return size;
-}
-
-} // anonymous namespace
-
 std::istream &
 operator>>(std::istream & in, Configuration::Verify & verify)
 {
@@ -98,17 +61,19 @@ operator<<(std::ostream & out, const Configuration::Verify & verify)
 {
     std::ostream::sentry sentry(out);
 
-    if (sentry)
-        switch (verify)
-        {
-        default:
-        case Configuration::NONE:
-            return out << "none";
-        case Configuration::FIRST:
-            return out << "first";
-        case Configuration::ALL:
-            return out << "all";
-        }
+    if (! sentry)
+        return out;
+
+    switch (verify)
+    {
+    default:
+    case Configuration::NONE:
+        return out << "none";
+    case Configuration::FIRST:
+        return out << "first";
+    case Configuration::ALL:
+        return out << "all";
+    }
 }
 
 std::ostream &
@@ -116,15 +81,17 @@ operator<<(std::ostream & out, const Configuration::Mode & mode)
 {
     std::ostream::sentry sentry(out);
 
-    if (sentry)
-        switch (mode)
-        {
-        default:
-        case Configuration::CLIENT:
-            return out << "client";
-        case Configuration::SERVER:
-            return out << "server";
-        }
+    if (! sentry)
+        return out;
+
+    switch (mode)
+    {
+    default:
+    case Configuration::CLIENT:
+        return out << "client";
+    case Configuration::SERVER:
+        return out << "server";
+    }
 }
 
 std::ostream &
