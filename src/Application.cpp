@@ -72,9 +72,10 @@ Application::run()
     t.async_wait(boost::bind(&Application::on_timeout, this,
                              ao::placeholders::error));
 
-    const pt::ptime start = pt::microsec_clock::universal_time();
+    statistics_.start_date = pt::microsec_clock::universal_time();
     io_service_.run();
-    statistics_.duration = pt::microsec_clock::universal_time() - start;
+    statistics_.total_duration = pt::microsec_clock::universal_time() -
+                                 statistics_.start_date;
 
     std::cout << statistics_ << std::endl;
 
@@ -251,6 +252,9 @@ Application::on_send(std::size_t bytes_transferred,
         else
         {
             std::cout << "Finished sending" << std::endl;
+
+            statistics_.receive_duration = pt::microsec_clock::universal_time() -
+                                           statistics_.start_date;
 
             if (configuration_.shutdown_policy == Configuration::SEND_COMPLETE)
                 socket_.shutdown_send();

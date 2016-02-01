@@ -59,16 +59,17 @@ compute_bandwith(Size bytes_count,
 std::ostream &
 operator<<(std::ostream & out, const Statistics & statistics)
 {
-    return out << "received_bytes_count: "
+    return out << "started: " << statistics.start_date << "\n"
+               << "received_bytes_count: "
                << statistics.received_bytes_count << "\n"
                << "receive_bandwith: "
                << compute_bandwith(statistics.received_bytes_count,
-                                   statistics.duration) << "\n"
+                                   statistics.receive_duration) << "\n"
                << "sent_bytes_count: "
                << statistics.sent_bytes_count << "\n"
                << "send_bandwidth: "
                << compute_bandwith(statistics.sent_bytes_count,
-                                   statistics.duration)
+                                   statistics.total_duration)
                << std::endl;
 }
 
