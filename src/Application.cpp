@@ -208,8 +208,16 @@ Application::verify(std::size_t bytes_transferred)
 void
 Application::verify(std::size_t offset, uint8_t expected_byte)
 {
-    if (receive_buffer_[offset] != expected_byte)
+    uint8_t actual = receive_buffer_[offset];
+    if (actual != expected_byte)
+    {
+        std::cerr << "Checksum error on byte "
+                  << statistics_.received_bytes_count + offset
+                  << ": expected " << int(expected_byte)
+                  << " got " << int(actual) << "." << std::endl;
+
         abort(error::checksum_failed);
+    }
 }
 
 void
