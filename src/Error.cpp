@@ -1,6 +1,6 @@
 #include "Error.hpp"
 
-#include <boost/config.hpp>
+#include "Cxx11.hpp"
 
 namespace enyx {
 namespace tcp_tester {
@@ -14,7 +14,7 @@ struct category : boost::system::error_category
     { }
 
     virtual const char*
-    name() const BOOST_NOEXCEPT
+    name() const CXX11_NOEXCEPT
     {
         return "tcp_tester";
     }
