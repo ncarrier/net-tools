@@ -1,5 +1,7 @@
 #include "Error.hpp"
 
+#include <boost/config.hpp>
+
 namespace enyx {
 namespace tcp_tester {
 
@@ -12,7 +14,7 @@ struct category : boost::system::error_category
     { }
 
     virtual const char*
-    name() const
+    name() const BOOST_NOEXCEPT
     {
         return "tcp_tester";
     }

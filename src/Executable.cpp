@@ -134,6 +134,8 @@ namespace Executable {
 void
 run(int argc, char** argv)
 {
+    std::cout << "Starting.." << std::endl;
+
     Application(parse_command_line(argc, argv)).run();
 }
 

@@ -91,19 +91,21 @@ Socket::connect(const ao::ip::tcp::endpoint & e)
 {
     socket_.open(e.protocol());
     socket_.connect(e);
+
+    std::cout << "Connected to '" << e << "'" << std::endl;
 }
 
 void
 Socket::listen(const ao::ip::tcp::endpoint & e,
                const boost::posix_time::time_duration & timeout)
 {
+    // Schedule an asynchronous accept.
+    ao::ip::tcp::acceptor a(io_service_, e);
+
     std::cout << "Waiting " << timeout
               << " for client to connect" << std::endl;
 
     boost::system::error_code failure;
-
-    // Schedule an asynchronous accept.
-    ao::ip::tcp::acceptor a(io_service_, e);
     on_accept on_accept = { failure };
     a.async_accept(socket_, on_accept);
 
