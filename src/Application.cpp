@@ -228,6 +228,10 @@ Application::async_send(std::size_t slice_remaining_size)
                                          this, _1));
     else
     {
+        std::size_t remaining_size = configuration_.size -
+                                     statistics_.sent_bytes_count;
+
+        slice_remaining_size = std::min(slice_remaining_size, remaining_size);
         std::size_t offset = statistics_.sent_bytes_count % send_buffer_.size();
         std::size_t size = std::min(slice_remaining_size,
                                     send_buffer_.size() - offset);
