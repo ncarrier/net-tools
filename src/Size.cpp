@@ -40,14 +40,14 @@ namespace {
 uint64_t
 parse_size(const std::string & s)
 {
-    boost::regex r("(\\d+)\\s*([KMGTPE]?)([bB])");
+    boost::regex r("(\\d+)\\s*([KMGTPE]i)?(B|bit)");
     boost::smatch m;
 
     if (! boost::regex_match(s, m, r))
     {
         std::ostringstream error;
         error << "size '" << s
-              << "' doesn't match \\d+\\s*[KMGTPE]?[bB]";
+              << "' doesn't match \\d+\\s*([KMGTPE]i)?(B|bit)";
         throw std::runtime_error(error.str());
     }
 
@@ -70,7 +70,7 @@ parse_size(const std::string & s)
                 size *= 1024;
         }
 
-    if (m.str(3) == "b")
+    if (m.str(3) == "bit")
         size /= 8;
 
     return size;
@@ -94,7 +94,13 @@ operator>>(std::istream & in, Size & size)
     return in;
 }
 
-const char * units[] = { "b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb" };
+const char * units[] = { "bit",
+                         "Kibit",
+                         "Mibit",
+                         "Gibit",
+                         "Tibit",
+                         "Pibit",
+                         "Eibit" };
 #define UNITS_COUNT ((sizeof(units)) / sizeof(units[0]))
 
 std::ostream &

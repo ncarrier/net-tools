@@ -58,18 +58,18 @@ parse_command_line(int argc, char** argv)
             "Listen on following address\n")
         ("size,s",
             po::value<Size>(&c.size),
-            "Amount of data to send (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n");
+            "Amount of data to send (e.g. 8KiB, 16MiB, 1Gibit, 1GiB)\n");
 
     po::options_description optional("Optional arguments");
     optional.add_options()
         ("tx-bandwidth,t",
             po::value<Size>(&c.send_bandwidth)
                 ->default_value(DEFAULT_BANDWIDTH),
-            "Limit send bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
+            "Limit send bandwidth (e.g. 8KiB, 16MiB, 1Gibit, 1GiB)\n")
         ("rx-bandwidth,r",
             po::value<Size>(&c.receive_bandwidth)
                 ->default_value(DEFAULT_BANDWIDTH),
-            "Limit receive bandwidth (e.g. 8Kb, 16Mb, 1Gb, 1GB)\n")
+            "Limit receive bandwidth (e.g. 8KiB, 16MiB, 1Gibit, 1GiB)\n")
         ("bandwidth-sampling-frequency,f",
             po::value<uint64_t>(&c.bandwidth_sampling_frequency)
                 ->default_value(10),
@@ -81,7 +81,7 @@ parse_command_line(int argc, char** argv)
             "  - none\n  - first\n  - all\n")
         ("windows,w",
             po::value<Size>(&c.windows),
-            "Tcp socket buffer size (e.g. 8Kb, 16Mb)\n")
+            "Tcp socket buffer size (e.g. 8KiB, 16MiB)\n")
         ("shutdown-policy,S",
             po::value<Configuration::ShutdownPolicy>(&c.shutdown_policy)
                 ->default_value(Configuration::RECEIVE_COMPLETE),
