@@ -79,6 +79,11 @@ parse_command_line(int argc, char** argv)
                 ->default_value(Configuration::NONE),
             "Verify received bytes. Accepted values:\n"
             "  - none\n  - first\n  - all\n")
+        ("mode,m",
+            po::value<Configuration::Direction>(&c.direction)
+                ->default_value(Configuration::BOTH),
+            "Transfer mode. Accepted values:\n"
+            "  - rx\n  - tx\n  - both\n")
         ("windows,w",
             po::value<Size>(&c.windows),
             "Tcp socket buffer size (e.g. 8Kb, 16Mb)\n")
