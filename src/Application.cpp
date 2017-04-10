@@ -61,8 +61,10 @@ Application::Application(const Configuration & configuration)
 
     std::cout << configuration_ << std::endl;
 
-    async_receive();
-    async_send();
+    if (configuration.direction != Configuration::TX)
+        async_receive();
+    if (configuration.direction != Configuration::RX)
+        async_send();
 }
 
 void
@@ -265,7 +267,12 @@ Application::on_send(std::size_t bytes_transferred,
                                            statistics_.start_date;
 
             if (configuration_.shutdown_policy == Configuration::SEND_COMPLETE)
-                socket_.shutdown_send();
+            {
+                if (configuration_.direction == Configuration::TX)
+                    finish();
+                else
+                    socket_.shutdown_send();
+            }
         }
     }
 }
