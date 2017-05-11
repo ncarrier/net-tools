@@ -149,6 +149,10 @@ Application::on_receive(std::size_t bytes_transferred,
         verify(bytes_transferred);
         statistics_.received_bytes_count += bytes_transferred;
 
+        if (configuration_.direction == Configuration::RX)
+            statistics_.receive_duration = pt::microsec_clock::universal_time()
+                                           - statistics_.start_date;
+
         std::size_t size = slice_remaining_size - bytes_transferred;
         if (statistics_.received_bytes_count < configuration_.size)
             async_receive(size);
