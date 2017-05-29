@@ -20,3 +20,9 @@ add_executable(nx-iperf
 target_link_libraries(nx-iperf
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT})
+
+install(TARGETS
+        nx-iperf
+    DESTINATION
+        ${CMAKE_INSTALL_BINDIR}
+    COMPONENT tools)
