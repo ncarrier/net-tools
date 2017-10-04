@@ -59,6 +59,10 @@ compute_bandwidth(Size bytes_count,
 std::ostream &
 operator<<(std::ostream & out, const Statistics & statistics)
 {
+    clock_t user = statistics.cpu_end.tms_utime - statistics.cpu_start.tms_utime;
+    clock_t system = statistics.cpu_end.tms_stime - statistics.cpu_start.tms_stime;
+    clock_t ticks = user + system;
+
     return out << "started: " << statistics.start_date << "\n"
                << "received_bytes_count: "
                << statistics.received_bytes_count << "\n"
@@ -69,7 +73,8 @@ operator<<(std::ostream & out, const Statistics & statistics)
                << statistics.sent_bytes_count << "\n"
                << "send_bandwidth: "
                << compute_bandwidth(statistics.sent_bytes_count,
-                                   statistics.total_duration)
+                                   statistics.total_duration) << "\n"
+	       << "cpu ticks: " << ticks
                << std::endl;
 }
 

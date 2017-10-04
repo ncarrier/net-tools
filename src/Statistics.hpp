@@ -27,6 +27,8 @@
 #include <stdint.h>
 #include <iosfwd>
 
+#include <sys/times.h>
+
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
 #include "Size.hpp"
@@ -41,6 +43,8 @@ struct Statistics
     boost::posix_time::time_duration receive_duration;
     Size sent_bytes_count;
     boost::posix_time::time_duration total_duration;
+    struct tms cpu_start;
+    struct tms cpu_end;
 };
 
 std::ostream &

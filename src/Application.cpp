@@ -147,16 +147,21 @@ Application::on_receive(std::size_t bytes_transferred,
     else
     {
         verify(bytes_transferred);
-        statistics_.received_bytes_count += bytes_transferred;
 
-        if (configuration_.direction == Configuration::RX)
+        if (configuration_.direction == Configuration::RX) {
             statistics_.receive_duration = pt::microsec_clock::universal_time()
                                            - statistics_.start_date;
+            if (statistics_.received_bytes_count == 0)
+                times(&statistics_.cpu_start);
+        }
+        statistics_.received_bytes_count += bytes_transferred;
 
         std::size_t size = slice_remaining_size - bytes_transferred;
-        if (statistics_.received_bytes_count < configuration_.size)
+        if (statistics_.received_bytes_count < configuration_.size) {
             async_receive(size);
-        else
+            if (configuration_.direction == Configuration::RX)
+                times(&statistics_.cpu_end);
+        } else
         {
             if (configuration_.shutdown_policy == Configuration::RECEIVE_COMPLETE)
                 socket_.shutdown_send();
@@ -259,11 +264,15 @@ Application::on_send(std::size_t bytes_transferred,
         abort(failure);
     else
     {
+        if (statistics_.sent_bytes_count == 0) {
+            times(&statistics_.cpu_start);
+        }
         statistics_.sent_bytes_count += bytes_transferred;
         std::size_t size = slice_remaining_size - bytes_transferred;
-        if (statistics_.sent_bytes_count < configuration_.size)
+        if (statistics_.sent_bytes_count < configuration_.size) {
             async_send(size);
-        else
+            times(&statistics_.cpu_end);
+        } else
         {
             std::cout << "Finished sending" << std::endl;
 
